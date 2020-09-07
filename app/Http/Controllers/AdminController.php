@@ -31,7 +31,41 @@ class AdminController extends Controller
 
 
 
-    public function form_servico(){
-        return view('form-servico');
+    public function form_servico($orcamento_id,Request $request){
+        $id= $request->param1 ;
+        if( $id <> 0){
+             $servico = \App\servico::find($id);
+         }else{
+             $servico = new \App\servico();
+             $servico->id = 0;
+         }
+        return view('form-servico')
+        ->with('orcamento_id',$orcamento_id)
+        ->with('servico',$servico);
+    }
+
+    public function form_servico_store($orcamento_id, Request $request){
+        $servico = new \App\servico();
+        $id= $request->param1;
+
+        if( $id <> 0) $servico = \App\servico::find($id);
+        
+        $servico->descricao = $request->param2;
+        $servico->valor = (double) $request->param3;
+        $servico->orcamento_id = $orcamento_id;
+        $servico->save();
+        
+        return redirect(route('formulario',$orcamento_id));
+
+    }
+
+    public function form_servico_delete($id){
+        $servico = \App\servico::find($id);
+        
+        if($servico->delete()){
+            return "ok";
+        }
+        return "not";
+        
     }
 }

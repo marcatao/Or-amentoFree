@@ -888,3 +888,19 @@
 .flash {
   animation-name: flash;
 }
+
+
+.servico{
+  padding: 2vh;
+  border:1px solid #ebe6e6;
+  border-radius: 5px;
+  margin-bottom: 2vh;
+  background-color: rgb(245, 245, 245);
+  font-weight: 400;
+  vertical-align: middle;
+}
+.servico span{
+  font-size: 5vh;
+  vertical-align: middle;
+  cursor: pointer;
+}

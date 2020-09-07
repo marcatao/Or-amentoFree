@@ -40,20 +40,20 @@
           @if(!Auth::user())
 
                <li class="nav-item">
-                 <a class="nav-link" href="/login" target="_blank">
+                 <a class="nav-link" href="/login">
                    <i class="material-icons">lock_outline</i>Entrar no Sistema
                  </a>
                </li>
            @else 
                <li class="nav-item">
-                 <a class="nav-link" href="{{route('novo-orcamento')}}" target="_blank">
+                 <a class="nav-link" href="{{route('novo-orcamento')}}">
                   <span class="material-icons">
                     control_point
                     </span> Novo Orçamento
                  </a>
                </li>
                <li class="nav-item">
-                <a class="nav-link" href="{{route('index')}}" target="_blank">
+                <a class="nav-link" href="{{route('index')}}">
                   <span class="material-icons">
                     account_circle
                     </span> {{ Auth::user()->name }}

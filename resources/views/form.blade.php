@@ -19,11 +19,11 @@
   
 <div class="main main-raised mt-5">
 <div class="section section-basic">
-  <div class="container">
+  <div class="container" id="main_form">
     <div class="title">
       <h2>Dados do cliente</h2>
     </div>
-    <form>
+   
          <div class="form-group">
             <label for="nomeCliente" class="bmd-label-floating">Nome Cliente</label>
             <input type="text" class="form-control" id="nomeCliente" name="nomeCliente" required>
@@ -42,14 +42,34 @@
       <div class="title">
            <h2>Serviços<button onclick="chamaModal()" class="btn btn-primary pull-right">Adicionar</button></h2>
       </div>
-    </form>    
+     @if(count($o->servicos)==0)
+        <h2 class="text-center text-muted">Nenhum serviço informado</h2>
+     @endif
 
+      @foreach ($o->servicos as $serv)
+          <div class="row servico" id="servico_{{$serv->id}}">
+            <div class="col-7">{{$serv->descricao}}</div>
+            <div class="col-3">R$: {{number_format($serv->valor,2,'.',',')}}</div>
+            <div class="col-2">
+              <a class="text-danger"  onclick="deleta_servico('{{$serv->id}}')">
+                
+                <span class="material-icons">
+                restore_from_trash
+                </span>
+                
+              </a> 
+            </div>
+
+          </div>
+      @endforeach
+   
  
-
-    
+ 
+      <button onclick="enviaOrçamento()" class="btn btn-primary btn-block">Enviar Oraçamento</button> 
+     
 </div>
 
-
+   
 </div>
 </div>
 
@@ -66,12 +86,23 @@
     event.preventDefault();
     $('.modal-title').html('Descreva o serviço e valor:');
     $('#myModal').modal('show');
-
-    requisicao('{{route('form-servico')}}','POST')
+    requisicao('{{route('form-servico',$o->id)}}','get',0)
     .then(result => {
      $('.modal-body').html(result);
     });
+  }
 
+  function deleta_servico(id){
+    let url = '{{route('form-servico','ids')}}';
+    url = url.replace('ids',id);
+    requisicao(url,'delete')
+    .then(result => {
+     $('#servico_'+id).hide('slow');
+    });
+  }
+
+  function enviaOrçamento(){
+    alert('Enviar orcamento');
   }
 </script>
 @endsection
