@@ -24,15 +24,17 @@
       <h2>Dados do cliente</h2>
     </div>
    
+   <form method="post" action="{{route('formulario',$o->id)}}">  
+    {{  csrf_field() }}
          <div class="form-group">
             <label for="nomeCliente" class="bmd-label-floating">Nome Cliente</label>
-            <input type="text" class="form-control" id="nomeCliente" name="nomeCliente" required>
+            <input type="text" class="form-control" id="nomeCliente" name="nomeCliente" value="{{$o->nomeCliente}}" required>
             <span class="bmd-help">Inserir o nome do cliente</span>
           </div>
 
           <div class="form-group">
             <label for="emailCliente" class="bmd-label-floating">Email Cliente</label>
-            <input type="email" class="form-control" id="emailCliente" name="emailCliente" required>
+            <input type="email" class="form-control" id="emailCliente" name="emailCliente"  value="{{$o->emailCliente}}" required>
             <span class="bmd-help">Inserir o email do cliente</span>
           </div>
 
@@ -42,31 +44,19 @@
       <div class="title">
            <h2>Serviços<button onclick="chamaModal()" class="btn btn-primary pull-right">Adicionar</button></h2>
       </div>
-     @if(count($o->servicos)==0)
-        <h2 class="text-center text-muted">Nenhum serviço informado</h2>
-     @endif
+  
+        <div id="servico_root">
+          @include('servicos-lista')
+        </div>
 
-      @foreach ($o->servicos as $serv)
-          <div class="row servico" id="servico_{{$serv->id}}">
-            <div class="col-7">{{$serv->descricao}}</div>
-            <div class="col-3">R$: {{number_format($serv->valor,2,'.',',')}}</div>
-            <div class="col-2">
-              <a class="text-danger"  onclick="deleta_servico('{{$serv->id}}')">
-                
-                <span class="material-icons">
-                restore_from_trash
-                </span>
-                
-              </a> 
-            </div>
-
-          </div>
-      @endforeach
-   
+      <div class="form-group">
+        <label for="nomeCliente" class="bmd-label-floating">Observações</label>
+        <textarea class="form-control" id="obs" name="obs">{{$o->obs}}</textarea>
+     </div>
  
  
-      <button onclick="enviaOrçamento()" class="btn btn-primary btn-block">Enviar Oraçamento</button> 
-     
+      <button type="submit" class="btn btn-primary btn-block">Enviar Oraçamento</button> 
+   </form>    
 </div>
 
    
@@ -101,8 +91,12 @@
     });
   }
 
-  function enviaOrçamento(){
-    alert('Enviar orcamento');
+  function lista_servico(id){
+    requisicao('{{route('lista-servico')}}','get', id)
+    .then(result => {
+     $('#servico_root').html(result);
+    });
   }
+
 </script>
 @endsection

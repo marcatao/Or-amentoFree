@@ -1,8 +1,8 @@
 
-<input type="text" value="{{$servico->id}}" name="id" id="id">
+<input type="hidden" value="{{$servico->id}}" name="id" id="id">
 <div class="form-group">
     <label for="descricao" class="bmd-label-floating">Descrição do servico</label>
-    <textarea t class="form-control" id="descricao" name="descricao"  rows="4" required>{{$servico->descricao}}</textarea>
+    <textarea t class="form-control" id="descricao" name="descricao"  rows="3" required>{{$servico->descricao}}</textarea>
     <span class="bmd-help">Descreva o serviço que sera impresso no orçamento</span>
 </div>
 
@@ -16,7 +16,7 @@
 
 <script>
 function store_servico(){
-    console.log('aqui');
+
     const desc = $('#descricao').val();
     const valor = parseFloat($('#valor').val());
     if(desc == '' || valor == ''){
@@ -26,7 +26,8 @@ function store_servico(){
  
     requisicao('{{route('form-servico',$orcamento_id)}}','post','{{$servico->id}}', desc, valor)
     .then(result => {
-        location.reload();
+        $('#myModal').modal('hide');
+        lista_servico('{{$orcamento_id}}');
     });   
 }
 function isFloat(n){

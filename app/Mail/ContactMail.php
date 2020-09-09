@@ -17,9 +17,9 @@ class ContactMail extends Mailable
      *
      * @return void
      */
-    public function __construct($request)
+    public function __construct($id)
     {
-        $this->request = $request;
+        $this->id = $id;
     }
 
     /**
@@ -29,8 +29,8 @@ class ContactMail extends Mailable
      */
     public function build()
     {
-        return $this->view('email.contato_site')
-                    ->subject('Contato via Website')
-                    ->with('request',$this->request); 
+        return $this->view('email.orcamentoEmail')
+                    ->subject('Orcamento Eletricista - Célio')
+                    ->with('id',$this->id); 
     }
 }

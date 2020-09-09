@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\orcamento;
 
+use App\Mail\ContactMail;
+use Illuminate\Support\Facades\Mail;
+
 class AdminController extends Controller
 {
    
@@ -67,5 +70,32 @@ class AdminController extends Controller
         }
         return "not";
         
+    }
+
+    public function formulario_save($id,Request $request){
+        $o = orcamento::find($id);
+        $o->nomeCliente = $request->nomeCliente;
+        $o->emailCliente = $request->emailCliente;
+        $o->status = 1;
+        $o->obs = $request->obs;
+        $o->save();
+        return $this->email($o->id);
+    }
+
+    public function enviados(){
+        $orcamentos = orcamento::where('status','1')->get();
+        return view('enviados')->with('orcamentos',$orcamentos);
+    }
+
+    public function email($id){
+        $o = orcamento::find($id);
+         Mail::to([['email' => 'contato@eletricistacelio.com.br' , 'name'=> 'Admin do sistema'],
+                  ['email' => $o->emailCliente, 'name'=> $o->nomeCliente]])->send(new ContactMail($id));
+        return redirect('enviados');
+    }
+
+    public function lista_servico(Request $request){
+         $o = orcamento::find($request->param1);
+        return view('servicos-lista')->with('o',$o);
     }
 }
